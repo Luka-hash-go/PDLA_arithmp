@@ -1,6 +1,6 @@
 # ArithmP
 
-ArithmP is a small expression parser and evaluator written in Python. test ahhhhh
+ArithmP is a small expression parser and evaluator written in Python.
 
 ## Requirements and installation
 
