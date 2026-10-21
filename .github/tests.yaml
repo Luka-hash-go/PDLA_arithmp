@@ -21,4 +21,4 @@ jobs: # contenu des tests et préparation à faire
         with:
           python-version: "3.13"
       - run: uv sync --locked
-      - run: uv run pytest
+      - run: uv run pytest #lancement test pystest

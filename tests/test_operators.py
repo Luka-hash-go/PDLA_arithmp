@@ -1,4 +1,4 @@
-from arithmp.parser import parser
+from arithmp.parser import Parser
 
 def test_add():
     parse = Parser().parse
