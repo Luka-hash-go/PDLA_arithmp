@@ -16,5 +16,30 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "poethepoet>=0.49.0",
     "pytest>=9.1.1",
+    "ruff>=0.17.1",
+    "ty>=0.0.90",
 ]
+
+[tool.poe.tasks]
+format-imports = "ruff check --select I src tests --fix"
+format-ruff = "ruff format src tests"
+format.sequence = ["format-imports", "format-ruff"]
+lint-ruff = "ruff check src tests"
+lint-ruff-format = "ruff format --check src tests"
+lint-ty = "ty check src tests"
+lint.sequence = ["lint-ruff", "lint-ruff-format", "lint-ty"]
+lint.ignore_fail = "return_non_zero"
+
+[tool.ruff.lint]
+# Configuration allégée : on cible les bugs (B), le tri des imports (I) et les guillemets (Q)
+extend-select = ["B", "I", "Q"]
+preview = true
+
+[tool.ruff.lint.per-file-ignores]
+# Autorise l'utilisation de assert dans les tests
+"tests/*" = ["assert"]
+
+[tool.ty.analysis]
+strict-literal-narrowing = true

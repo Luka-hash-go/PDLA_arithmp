@@ -1,0 +1,16 @@
+name : Linters
+
+on : [push, pull_request] #on active a chaque push et pull request
+
+jobs:
+  test:
+     test:
+      runs-on: ubuntu-latest #mon system actuel + cela est apparement vu les recherches sur internet le systeme natif sur github
+      steps:
+        - uses: actions/checkout@v4 #permet de marcher avec tout vu sur internet 
+        - uses: astral-sh/setup-uv@v3
+        - uses: actions/setup-python@v5
+          with:
+            python-version: "3.13"
+        - run: uv sync --locked
+        - run: uv run poe lint #lancement poe lint je vois pas ou j'aurais pu le trouver (je l'ai trouve dans le final )
