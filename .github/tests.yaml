@@ -4,18 +4,14 @@ name : Tests CI
 
 #Etape tests
 
-on: 
-  push:
-    branches:
-      - main # une fois test pull request reussie refaire tourner test sur le main pour voir si tout marche
-  pull request: 
+on: [push,pull_request] #on active ce test lors push et pull_request
 
 
 jobs: # contenu des tests et préparation à faire
   test:
     runs-on: ubuntu-latest #mon system actuel + cela est apparement vu les recherches sur internet le systeme natif sur github
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 #permet de marcher avec tout vu sur internet 
       - uses: astral-sh/setup-uv@v3
       - uses: actions/setup-python@v5
         with:
