@@ -1,0 +1,36 @@
+name: Tests CI
+
+# Déclencheurs : à chaque push sur la branche main ou création d'une Pull Request
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Récupère le code 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Installe uv
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      # 3. Installe Python 3.13
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # 4. Installe les dépendances de ton projet
+      - name: Install dependencies
+        run: uv sync --locked
+
+      # 5. Lance les tests
+      - name: Run pytest
+        run: uv run pytest
+        
