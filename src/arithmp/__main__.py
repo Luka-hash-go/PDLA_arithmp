@@ -6,18 +6,28 @@ import click
 from .parser import Parser, ParserException
 
 @click.command()
+@click.option("-c", "command", type=str, help="Évalue directement l'expression donnée.")
 @click.argument("filepath", type=click.Path(exists=True, path_type=Path), required=False)
-def main(filepath: Path | None) -> None:
+def main(command: str | None, filepath: Path | None) -> None:
     """
     Main entry point for the Arithmp command-line interface.
     """
     parser = Parser()
-    if filepath:
+    
+    if command:
+        try:
+            if (result := parser.parse(None, command)) is not None:
+                click.echo(result)
+        except ParserException as e:
+            click.echo(f"Error : {e}")
+            
+    elif filepath:
         try:
             if (result := parser.parse(filepath, filepath.read_text())) is not None:
                 click.echo(result)
         except ParserException as e:
             click.echo(f"Error in script '{filepath}': {e}")
+            
     else:
         click.echo("Interpréteur Arithmp (Ctrl+C pour quitter)")
         while True:
