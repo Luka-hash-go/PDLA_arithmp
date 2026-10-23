@@ -46,7 +46,12 @@ def _exit() -> NoReturn:
     raise SystemExit
 
 
-_BUILTINS: dict[str, VariableType] = {}
+_BUILTINS: dict[str, VariableType] = {
+    "round": round,
+    "abs": abs,
+    "max": max,
+    "min": min,
+}
 
 
 class _Transformer(Transformer[Tree[Token] | Token, str]):
@@ -228,6 +233,43 @@ class Parser:
                 return _UNARY_OPERATORS[tree.data](
                     self._eval(tree.children[0], variables, context)
                 )
+            case "variable_assignment":
+                var_name=str(tree.children[0])
+                var_value = self._eval(tree.children[1], variables, context)
+                variables[var_name] = var_value
+                return var_value
+            case "variable":
+                var_name = str(tree.children[0])
+                try:
+                    return variables[var_name]
+                except KeyError:
+                    raise ParserException(
+                        f"undefined variable '{var_name}'",context.exception(tree)
+                    )
+            case "function_call":
+                func_name = str(tree.children[0])
+                
+                # Vérifie si la fonction existe dans nos built-ins
+                if func_name not in _BUILTINS:
+                    raise ParserException(
+                        f"undefined function '{func_name}'", context.exception(tree)
+                    )
+                
+                func = _BUILTINS[func_name]
+                
+                # Récupère les arguments s'il y en a
+                args = []
+                if len(tree.children) > 1 and tree.children[1] is not None:
+                    # L'enfant 1 est le nœud 'arguments'
+                    for arg_node in tree.children[1].children:
+                        args.append(self._eval(arg_node, variables, context))
+                
+                try:
+                    return func(*args)
+                except Exception as e:
+                    raise ParserException(
+                        f"error calling function '{func_name}': {e}", context.exception(tree)
+                    )
             case "body":
                 result: VariableType = None
                 for child in tree.children:
@@ -237,6 +279,7 @@ class Parser:
                 raise ParserException(
                     f"unexpected tree data: {tree.data}", context.exception(tree)
                 )
+            
 
     def _eval(
         self, tree: Tree[Token] | Token, variables: Variables, context: Context
