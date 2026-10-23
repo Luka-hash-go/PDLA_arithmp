@@ -18,3 +18,17 @@ def test_variable_assignement():
     #test reassignation
 
     assert parse(None,"a = a * 2") == 8
+
+def test_fonction_call():
+    parse = Parser().parse
+
+    #test fonction abs
+    assert parse(None,"abs(-4)") == 4
+
+    #test fonction round
+
+    assert parse(None,"round(2.7)") == 3
+
+    #test avec plusieurs arg
+
+    assert parse(None,"max(10,20)")  == 20 
