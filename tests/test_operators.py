@@ -4,3 +4,15 @@ def test_add():
     parse = Parser().parse
     assert parse(None, "1 + 1") == 2
     assert parse(None, "0 + 3") == 3
+
+    #test pour assignation variables
+
+    assert parse(None,"a = 4") == 4
+
+    # test reutilisation var
+
+    assert parse(None, "a + 6") == 10
+
+    #test reassignation
+
+    assert parse(None,"a = a * 2") == 8
