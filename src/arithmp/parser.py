@@ -228,7 +228,7 @@ class Parser:
                 return _UNARY_OPERATORS[tree.data](
                     self._eval(tree.children[0], variables, context)
                 )
-            case "variable_assignement":
+            case "variable_assignment":
                 var_name=str(tree.children[0])
                 var_value = self._eval(tree.children[1], variables, context)
                 variables[var_name] = var_value
@@ -239,7 +239,7 @@ class Parser:
                     return variables[var_name]
                 except KeyError:
                     raise ParserException(
-                        f"undifined variable '{var_name}'",context.exception(tree)
+                        f"undefined variable '{var_name}'",context.exception(tree)
                     )
             
             case "body":

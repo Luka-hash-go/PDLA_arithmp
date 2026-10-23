@@ -5,6 +5,8 @@ def test_add():
     assert parse(None, "1 + 1") == 2
     assert parse(None, "0 + 3") == 3
 
+def test_variable_assignement():
+    parse = Parser().parse
     #test pour assignation variables
 
     assert parse(None,"a = 4") == 4
