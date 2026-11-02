@@ -54,3 +54,8 @@ strings if either operand is a string.
 (2 + 3) * 4
 age >= 18 ? "adult" : "child"
 ```
+
+```docker command for uses
+sudo docker build -t arithmp-image
+sudo docker run -it arithmp-image
+```
